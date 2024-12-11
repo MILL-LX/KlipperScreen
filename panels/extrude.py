@@ -40,7 +40,6 @@ class Panel(ScreenPanel):
             'load': self._gtk.Button("arrow-down", _("Load"), "color3"),
             'unload': self._gtk.Button("arrow-up", _("Unload"), "color2"),
             'retract': self._gtk.Button("retract", _("Retract"), "color1"),
-            'temperature': self._gtk.Button("heat-up", _("Temperature"), "color4"),
             'spoolman': self._gtk.Button("spoolman", "Spoolman", "color3"),
             'pressure': self._gtk.Button("settings", _("Pressure Advance"), "color2"),
             'retraction': self._gtk.Button("settings", _("Retraction"), "color1")
@@ -49,9 +48,6 @@ class Panel(ScreenPanel):
         self.buttons['load'].connect("clicked", self.check_min_temp, "load_unload", "+")
         self.buttons['unload'].connect("clicked", self.check_min_temp, "load_unload", "-")
         self.buttons['retract'].connect("clicked", self.check_min_temp, "extrude", "-")
-        self.buttons['temperature'].connect("clicked", self.menu_item_clicked, {
-            "panel": "temperature"
-        })
         self.buttons['spoolman'].connect("clicked", self.menu_item_clicked, {
             "panel": "spoolman"
         })
@@ -103,8 +99,6 @@ class Panel(ScreenPanel):
         if self._printer.get_config_section("firmware_retraction") and not self._screen.vertical_mode:
             xbox.add(self.buttons['retraction'])
             i += 1
-        if i < limit:
-            xbox.add(self.buttons['temperature'])
         if i < (limit - 1) and self._printer.spoolman:
             xbox.add(self.buttons['spoolman'])
 
