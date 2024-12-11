@@ -164,7 +164,7 @@ class Panel(MenuPanel):
 
         self.labels['devices'].insert_row(pos)
         self.labels['devices'].attach(name, 0, pos, 1, 1)
-        self.labels['devices'].attach(temp, 1, pos, 1, 1)
+        # self.labels['devices'].attach(temp, 1, pos, 1, 1) # MODEBUG
         self.labels['devices'].show_all()
         return True
 
@@ -283,6 +283,9 @@ class Panel(MenuPanel):
 
     def show_numpad(self, widget, device):
 
+        logging.info("disabling number pad for heater temperature")
+        return # MODEBUG
+
         if self.active_heater is not None:
             self.devices[self.active_heater]['name'].get_style_context().remove_class("button_active")
         self.active_heater = device
@@ -303,10 +306,12 @@ class Panel(MenuPanel):
             self.main_menu.remove(top)
             self.main_menu.remove(bottom)
             self.main_menu.attach(top, 0, 0, 1, 2)
-            self.main_menu.attach(self.labels["keypad"], 0, 2, 1, 2)
+            logging.info("Skipping Temperature Keypad")
+            # self.main_menu.attach(self.labels["keypad"], 0, 2, 1, 2) # MODEBUG
         else:
             self.main_menu.remove_column(1)
-            self.main_menu.attach(self.labels["keypad"], 1, 0, 1, 1)
+            logging.info("Skipping Temperature Keypad")
+            # self.main_menu.attach(self.labels["keypad"], 1, 0, 1, 1) # MODEBUG
         self.main_menu.show_all()
         self.numpad_visible = True
         self._screen.base_panel.set_control_sensitive(True, control='back')
