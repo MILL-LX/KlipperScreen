@@ -148,8 +148,9 @@ class Panel(MenuPanel):
 
         temp = self._gtk.Button(label="", lines=1)
         find_widget(temp, Gtk.Label).set_ellipsize(False)
-        if can_target:
-            temp.connect("clicked", self.show_numpad, device)
+        # MODEBUG
+        # if can_target:
+        #     temp.connect("clicked", self.show_numpad, device)
 
         self.devices[device] = {
             "class": class_name,
@@ -248,73 +249,6 @@ class Panel(MenuPanel):
             self.add_device(d)
 
         return self.left_panel
-
-    def hide_numpad(self, widget=None):
-        self.devices[self.active_heater]['name'].get_style_context().remove_class("button_active")
-        self.active_heater = None
-
-        if self._screen.vertical_mode:
-            if not self._gtk.ultra_tall:
-                self.update_graph_visibility(force_hide=False)
-            top = self.main_menu.get_child_at(0, 0)
-            bottom = self.main_menu.get_child_at(0, 2)
-            self.main_menu.remove(top)
-            self.main_menu.remove(bottom)
-            self.main_menu.attach(top, 0, 0, 1, 3)
-            self.main_menu.attach(self.labels["menu"], 0, 3, 1, 2)
-        else:
-            self.main_menu.remove_column(1)
-            self.main_menu.attach(self.labels["menu"], 1, 0, 1, 1)
-        self.main_menu.show_all()
-        self.numpad_visible = False
-        self._screen.base_panel.set_control_sensitive(False, control='back')
-
-    def process_update(self, action, data):
-        if action != "notify_status_update":
-            return
-        for x in self._printer.get_temp_devices():
-            if x in data:
-                self.update_temp(
-                    x,
-                    self._printer.get_stat(x, "temperature"),
-                    self._printer.get_stat(x, "target"),
-                    self._printer.get_stat(x, "power"),
-                )
-
-    def show_numpad(self, widget, device):
-
-        logging.info("disabling number pad for heater temperature")
-        return # MODEBUG
-
-        if self.active_heater is not None:
-            self.devices[self.active_heater]['name'].get_style_context().remove_class("button_active")
-        self.active_heater = device
-        self.devices[self.active_heater]['name'].get_style_context().add_class("button_active")
-
-        if "keypad" not in self.labels:
-            self.labels["keypad"] = Keypad(self._screen, self.change_target_temp, self.pid_calibrate, self.hide_numpad)
-        can_pid = self._printer.state not in ("printing", "paused") \
-            and self._screen.printer.config[self.active_heater]['control'] == 'pid'
-        self.labels["keypad"].show_pid(can_pid)
-        self.labels["keypad"].clear()
-
-        if self._screen.vertical_mode:
-            if not self._gtk.ultra_tall:
-                self.update_graph_visibility(force_hide=True)
-            top = self.main_menu.get_child_at(0, 0)
-            bottom = self.main_menu.get_child_at(0, 3)
-            self.main_menu.remove(top)
-            self.main_menu.remove(bottom)
-            self.main_menu.attach(top, 0, 0, 1, 2)
-            logging.info("Skipping Temperature Keypad")
-            # self.main_menu.attach(self.labels["keypad"], 0, 2, 1, 2) # MODEBUG
-        else:
-            self.main_menu.remove_column(1)
-            logging.info("Skipping Temperature Keypad")
-            # self.main_menu.attach(self.labels["keypad"], 1, 0, 1, 1) # MODEBUG
-        self.main_menu.show_all()
-        self.numpad_visible = True
-        self._screen.base_panel.set_control_sensitive(True, control='back')
 
     def update_graph(self):
         self.labels['da'].queue_draw()
