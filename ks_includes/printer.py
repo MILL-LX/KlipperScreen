@@ -1,4 +1,5 @@
 import logging
+
 import gi
 
 gi.require_version("Gtk", "3.0")
@@ -257,6 +258,7 @@ class Printer:
                 "gcode_macros": {"count": len(self.get_gcode_macros()), "list": self.get_gcode_macros()},
                 "leds": {"count": self.ledcount},
                 "config_sections": list(self.config.keys()),
+                "available_commands": self.available_commands,
             }
         }
 
