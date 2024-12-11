@@ -47,8 +47,10 @@ class Panel(MenuPanel):
         for device in self.devices:
             visible = self._config.get_config().getboolean(f"graph {self._screen.connected_printer}",
                                                            device, fallback=True)
-            visible = False # MODEBUG
             
+            logging.info('Disabling temperature graph')
+            visible = False # MODEBUG
+
             self.devices[device]['visible'] = visible
             self.labels['da'].set_showing(device, visible)
             if visible:

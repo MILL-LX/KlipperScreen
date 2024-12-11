@@ -38,6 +38,7 @@ class Panel(ScreenPanel):
         for item in items:
             key = list(item)[0]
             if key == 'temperature': # MODEBUG
+                logging.info('Removing Temperature button from main menu')
                 continue
             if not self.evaluate_enable(item[key]['enable']):
                 logging.debug(f"X > {key}")
