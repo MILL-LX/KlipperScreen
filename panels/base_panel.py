@@ -310,6 +310,10 @@ class BasePanel(ScreenPanel):
         for device in devices:
             temp = self._printer.get_stat(device, "temperature")
             if temp and device in self.labels:
+
+                logging.info("Skipping Temperature Updates") # MODEBUG
+                continue
+
                 name = ""
                 if not (device.startswith("extruder") or device.startswith("heater_bed")):
                     if self.titlebar_name_type == "full":

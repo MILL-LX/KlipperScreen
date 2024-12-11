@@ -230,7 +230,9 @@ class Panel(MenuPanel):
         temp = Gtk.Label(label=_("Temp (°C)"))
 
         self.labels['devices'].attach(name, 0, 0, 1, 1)
-        self.labels['devices'].attach(temp, 1, 0, 1, 1)
+
+        logging.info("Skipping Temperature label")
+        # self.labels['devices'].attach(temp, 1, 0, 1, 1) # MODEBUG
 
         self.labels['da'] = HeaterGraph(self._screen, self._printer, self._gtk.font_size)
 
